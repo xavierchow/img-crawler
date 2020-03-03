@@ -6,7 +6,7 @@ First of all, this is not a generic crawler tool, I built it to crawl the images
 
 ## Installation
 
-Download from http://example.com/FIXME.
+Download from https://github.com/xavierchow/img-crawler/releases.
 
 ## Usage
 
