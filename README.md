@@ -36,7 +36,6 @@ Crop it with height of `1180`.
 
 ```
 $ convert out.jpeg -crop x1180 +repage tile%02d.jpeg
-
 ```
 
 ## License
