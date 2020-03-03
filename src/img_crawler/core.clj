@@ -12,21 +12,22 @@
   [urls]
   (map-indexed (fn [idx url] {:id idx :url url}) urls))
 
-
-(defn- fetch-photo!
+(defn fetch-photo!
   "makes an HTTP request and fetches the binary object"
   [url]
   (let [req (client/get url {:as :byte-array :throw-exceptions false})]
     (if (= (:status req) 200)
       (:body req))))
 
-(defn- save-photo!
+(defn save-photo!
   "downloads and stores the photo on disk"
   [photo]
-  (let [p (fetch-photo! (:url photo))]
+  (let [p (fetch-photo! (:url photo)) path (str "photos-" (:id photo) ".jpeg")]
     (if (not (nil? p))
-      (with-open [w (io/output-stream (str "photos-" (:id photo) ".jpeg"))]
-        (.write w p)))))
+      (with-open [w (io/output-stream path)]
+        (do
+          (.write w p)
+          (println (str path " saved")))))))
 
 (defn get-gallery
   [html]
@@ -34,11 +35,9 @@
        (map last)
        (filter #(starts-with? % "https://mmbiz"))
        (build-photo)
-       (map save-photo!)
-       ))
+       (map save-photo!)))
 
 (defn -main
   [url]
   ;; url: "https://mp.weixin.qq.com/s/YpMnJ5_625zOq_huX8e83g"
-  (get-gallery (fetch-html url))
-  (println "Finished!"))
+  (dorun(get-gallery (fetch-html url))))
